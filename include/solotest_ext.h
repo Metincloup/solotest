@@ -18,30 +18,42 @@ struct solotest_valid_directions {
 	bool left;
 };
 
-enum solotest_neighbor {
-	SOLOTEST_NEIGHBOR_EMPTY,
-	SOLOTEST_NEIGHBOR_PEG,
-	SOLOTEST_NEIGHBOR_OUT,
-};
-
 /**
- * Neighbor states for each cardinal direction.
+ * A collection of 4 index.
  */
-struct solotest_neighbors {
-	enum solotest_neighbor top;
-	enum solotest_neighbor right;
-	enum solotest_neighbor bottom;
-	enum solotest_neighbor left;
+struct solotest_neighbor_indexes {
+	int top;
+	int right;
+	int bottom;
+	int left;
 };
 
 
 /**
- * Returns the neighbor states of the peg at the given index.
+ * Returns the neighbor indexes of the peg at the given index.
  */
-struct solotest_neighbors solotest_get_neighbors(const struct solotest_board *,
-						 int peg_index);
+struct solotest_neighbor_indexes solotest_get_neighbors(int peg_index);
 
+/**
+ * Returns the indexes of neighbors that are two tiles away (i.e., one peg
+ * in between).
+ */
+struct solotest_neighbor_indexes solotest_get_far_neighbors(int peg_index);
+
+/**
+ * Returns the directions in which the peg at the given index can move.
+ */
 struct solotest_valid_directions solotest_get_valid_directions(const struct solotest_board *,
 							       int peg_index);
+
+/**
+ * Prints board index layout for visualization.
+ */
+void solotest_print_indices();
+
+/**
+ * Prints current peg positions on the board.
+ */
+void solotest_print_board(uint64_t);
 
 #endif //SOLOTEST_EXT_H

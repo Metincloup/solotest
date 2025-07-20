@@ -41,12 +41,12 @@ build_test_%: $(DEBUG_OBJS)
 
 
 # Compiles source files into object files (release mode).
-$(OBJS): | $(OBJ_DIR)
+$(OBJS): $(SRCS) | $(OBJ_DIR)
 	$(CC) -c $(CFLAGS) $(patsubst $(OBJ_DIR)/%.o,$(SRC_DIR)/%.c, $@)\
 		-o $@
 
 # Compiles source files into object files for debug/tests.
-$(DEBUG_OBJS): | $(OBJ_DIR)
+$(DEBUG_OBJS): $(SRCS) | $(OBJ_DIR)
 	$(CC) -c $(TFLAGS) $(patsubst $(OBJ_DIR)/%.debug.o,$(SRC_DIR)/%.c, $@)\
 		-o $@
 

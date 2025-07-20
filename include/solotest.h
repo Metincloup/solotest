@@ -71,12 +71,11 @@ void solotest_clone(struct solotest_board *dst, const struct solotest_board *src
 /**
  * Returns the index corresponding to a bitfield with a single peg.
  */
-inline int solotest_bitfield_to_index(uint64_t bitfield);
+int solotest_bitfield_to_index(uint64_t bitfield);
 
 /**
  * Returns the bitfield representation of a peg at the given index.
  */
-inline uint64_t solotest_index_to_bitfield(int index);
-
+uint64_t solotest_index_to_bitfield(int index);
 
 #endif // SOLOTEST_H
