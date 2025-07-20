@@ -66,7 +66,7 @@ void solotest_move(struct solotest_board *, int peg_index,
 /**
  * Copies one board state into another.
  */
-void solotest_clone(struct solotest_board *dst, const struct solotest_board *src);
+void solotest_copy(struct solotest_board *dst, const struct solotest_board *src);
 
 /**
  * Returns the index corresponding to a bitfield with a single peg.

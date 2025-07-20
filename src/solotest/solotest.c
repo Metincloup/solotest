@@ -98,14 +98,25 @@ static inline void free_to_move(struct solotest_board *b, int index) {
 	struct solotest_neighbor_indexes farn = solotest_get_far_neighbors(index);
 	struct solotest_neighbor_indexes n = solotest_get_neighbors(index);
 
-	if (get_board_index(b->board, n.bottom))
-		b->pegs_can_move[0] = set_board_index(b->pegs_can_move[0], farn.bottom);
-	if (get_board_index(b->board, n.left))
-		b->pegs_can_move[1] = set_board_index(b->pegs_can_move[1], farn.left);
-	if (get_board_index(b->board, n.top))
-		b->pegs_can_move[2] = set_board_index(b->pegs_can_move[2], farn.top);
-	if (get_board_index(b->board, n.right))
-		b->pegs_can_move[3] = set_board_index(b->pegs_can_move[3], farn.right);
+	if (get_board_index(b->board, n.bottom) &&
+	    get_board_index(b->board, farn.bottom))
+		b->pegs_can_move[0] =
+			set_board_index(b->pegs_can_move[0], farn.bottom);
+
+	if (get_board_index(b->board, n.left) &&
+	    get_board_index(b->board, farn.left))
+		b->pegs_can_move[1] =
+			set_board_index(b->pegs_can_move[1], farn.left);
+
+	if (get_board_index(b->board, n.top) &&
+	    get_board_index(b->board, farn.top))
+		b->pegs_can_move[2] =
+			set_board_index(b->pegs_can_move[2], farn.top);
+
+	if (get_board_index(b->board, n.right) &&
+	    get_board_index(b->board, farn.right))
+		b->pegs_can_move[3] =
+			set_board_index(b->pegs_can_move[3], farn.right);
 }
 
 
@@ -116,8 +127,8 @@ void solotest_move(struct solotest_board *b, int peg_index,
 	struct solotest_neighbor_indexes n =
 		solotest_get_neighbors(peg_index);
 
-	int clear;
-	int place;
+	int clear = 0;
+	int place = 0;
 
 	switch (d) {
 	case SOLOTEST_DIRECTION_TOP:

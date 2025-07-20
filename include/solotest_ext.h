@@ -9,16 +9,6 @@
 
 
 /**
- * List of valid directions peg can move to.
- */
-struct solotest_valid_directions {
-	bool top;
-	bool right;
-	bool bottom;
-	bool left;
-};
-
-/**
  * A collection of 4 index.
  */
 struct solotest_neighbor_indexes {
@@ -39,12 +29,6 @@ struct solotest_neighbor_indexes solotest_get_neighbors(int peg_index);
  * in between).
  */
 struct solotest_neighbor_indexes solotest_get_far_neighbors(int peg_index);
-
-/**
- * Returns the directions in which the peg at the given index can move.
- */
-struct solotest_valid_directions solotest_get_valid_directions(const struct solotest_board *,
-							       int peg_index);
 
 /**
  * Prints board index layout for visualization.

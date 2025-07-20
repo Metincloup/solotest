@@ -81,7 +81,6 @@ inline struct solotest_neighbor_indexes solotest_get_far_neighbors(int peg_index
 	return NEIGHBOR_FAR_INDEXES[peg_index];
 }
 
-
 void solotest_print_indices() {
 	int i, j, index = 0;
 	for (i = 0; i < 7; i++) {
@@ -103,12 +102,12 @@ void solotest_print_board(uint64_t board) {
 	for (i = 0; i < 7; i++) {
 		for (j = 0; j < 7; j++) {
 			if ((i >= 2 && i <= 4) || (j >= 2 && j <= 4)) {
-				printf("%c ",
+				printf("%s ",
 				       (solotest_index_to_bitfield(index) & board) ?
-				       '#' : '.');
+				       "##" : "..");
 				index++;
 			} else {
-				printf("  ");
+				printf("   ");
 			}
 		}
 		printf("\n");
