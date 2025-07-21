@@ -7,7 +7,6 @@ int main()
 {
 	struct solotest_stack *stack;
 
-
 	stack = malloc(sizeof(struct solotest_stack));
 	solotest_stack_init(stack);
 

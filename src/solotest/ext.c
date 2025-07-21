@@ -37,8 +37,8 @@ void initialize_neighbor_indices()
 		}
 	}
 
-	for (int i = 0; i < 7; i++) {
-		for (int j = 0; j < 7; j++) {
+	for (int j = 0; j < 7; j++) {
+		for (int i = 0; i < 7; i++) {
 			index = INDEX_MAP[j][i];
 
 			if (index == -1)

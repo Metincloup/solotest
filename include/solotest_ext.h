@@ -40,4 +40,5 @@ void solotest_print_indices();
  */
 void solotest_print_board(uint64_t);
 
+
 #endif //SOLOTEST_EXT_H

@@ -1,6 +1,5 @@
 #include "../../include/solotest_stack.h"
 #include "../../include/vector.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 #define VEC_UNWRAP(vec) \

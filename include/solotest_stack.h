@@ -51,4 +51,3 @@ struct solotest_board *solotest_stack_pop(struct solotest_stack *);
 
 
 #endif // SOLOTEST_STACK_H
-

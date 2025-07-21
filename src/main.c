@@ -1,4 +1,5 @@
 #include "../include/solotest_play.h"
+#include "../include/solotest_solver.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -21,5 +22,9 @@ int main()
 
 	if (selection == 1) {
 		solotest_play();
+	} else if (selection == 2) {
+		solotest_solver();
+	} else {
+		printf("Unknown option!");
 	}
 }

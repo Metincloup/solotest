@@ -5,7 +5,7 @@
 
 
 void solotest_init(struct solotest_board *restrict b) {
-	b->peg_count = 0;
+	b->peg_count = 32;
 	b->board = 0x1fffeffff;
 	b->pegs_can_move[0] = 0x10000000; // index 28
 	b->pegs_can_move[1] = 0x4000; // index 14
@@ -13,7 +13,7 @@ void solotest_init(struct solotest_board *restrict b) {
 	b->pegs_can_move[3] = 0x40000; // index 18
 }
 
-void solotest_clone(struct solotest_board *dst,
+void solotest_copy(struct solotest_board *dst,
 		    const struct solotest_board *src) {
 	dst->peg_count = src->peg_count;
 	dst->board = src->board;
@@ -61,99 +61,69 @@ inline uint64_t solotest_index_to_bitfield(int index) {
 	return (uint64_t) 1 << index;
 }
 
-
-static inline uint64_t set_board_index(uint64_t board, int index)
+static inline void clear_peg(uint64_t *board, int index)
 {
-	return index == -1 ? board : board | solotest_index_to_bitfield(index);
+	if (index != -1)
+		*board &= ~solotest_index_to_bitfield(index);
 }
 
-static inline uint64_t clear_board_index(uint64_t board, int index)
+static inline void set_peg(uint64_t *board, int index)
 {
-	return index == -1 ? board : board & ~solotest_index_to_bitfield(index);
+	if (index != -1)
+		*board |= solotest_index_to_bitfield(index);
 }
 
-static inline uint64_t get_board_index(uint64_t board, int index)
+static inline bool has_peg(uint64_t board, int index)
 {
-	return index == -1 ? 0 : board & solotest_index_to_bitfield(index);
+	if (index == -1)
+		return 0;
+	return (board | solotest_index_to_bitfield(index)) != 0;
 }
 
-
-
-static inline void place_peg(struct solotest_board *b, int index) {
-	b->board = set_board_index(b->board, index);
-}
-static inline void block_move_to(struct solotest_board *b, int index) {
-	struct solotest_neighbor_indexes farn = solotest_get_far_neighbors(index);
-	b->pegs_can_move[0] = clear_board_index(b->pegs_can_move[0], farn.bottom);
-	b->pegs_can_move[1] = clear_board_index(b->pegs_can_move[1], farn.left);
-	b->pegs_can_move[2] = clear_board_index(b->pegs_can_move[2], farn.top);
-	b->pegs_can_move[3] = clear_board_index(b->pegs_can_move[3], farn.right);
-}
-
-static inline void clear_peg(struct solotest_board *b, int index) {
-	b->board = clear_board_index(b->board, index);
-}
-
-static inline void free_to_move(struct solotest_board *b, int index) {
-	struct solotest_neighbor_indexes farn = solotest_get_far_neighbors(index);
+void update_peg_can_move(struct solotest_board *b, int index)
+{
+	struct solotest_neighbor_indexes far_n = solotest_get_far_neighbors(index);
 	struct solotest_neighbor_indexes n = solotest_get_neighbors(index);
 
-	if (get_board_index(b->board, n.bottom) &&
-	    get_board_index(b->board, farn.bottom))
-		b->pegs_can_move[0] =
-			set_board_index(b->pegs_can_move[0], farn.bottom);
+	bool block = has_peg(b->board, index);
 
-	if (get_board_index(b->board, n.left) &&
-	    get_board_index(b->board, farn.left))
-		b->pegs_can_move[1] =
-			set_board_index(b->pegs_can_move[1], farn.left);
-
-	if (get_board_index(b->board, n.top) &&
-	    get_board_index(b->board, farn.top))
-		b->pegs_can_move[2] =
-			set_board_index(b->pegs_can_move[2], farn.top);
-
-	if (get_board_index(b->board, n.right) &&
-	    get_board_index(b->board, farn.right))
-		b->pegs_can_move[3] =
-			set_board_index(b->pegs_can_move[3], farn.right);
+	// TODO: implement peg_can_move
+	if (block) {
+	} else {
+	}
 }
 
-
-void solotest_move(struct solotest_board *b, int peg_index,
+void solotest_move(struct solotest_board *b, int peg,
 		   enum solotest_direction d) {
-	struct solotest_neighbor_indexes farn =
-		solotest_get_far_neighbors(peg_index);
-	struct solotest_neighbor_indexes n =
-		solotest_get_neighbors(peg_index);
+	struct solotest_neighbor_indexes far_n = solotest_get_far_neighbors(peg);
+	struct solotest_neighbor_indexes n = solotest_get_neighbors(peg);
 
-	int clear = 0;
-	int place = 0;
+	int over = 0, to = 0;
 
 	switch (d) {
 	case SOLOTEST_DIRECTION_TOP:
-		clear = n.top;
-		place = farn.top;
+		over = n.top;
+		to = far_n.top;
 		break;
 	case SOLOTEST_DIRECTION_RIGHT:
-		clear = n.right;
-		place = farn.right;
+		over = n.right;
+		to = far_n.right;
 		break;
 	case SOLOTEST_DIRECTION_BOTTOM:
-		clear = n.bottom;
-		place = farn.bottom;
+		over = n.bottom;
+		to = far_n.bottom;
 		break;
 	case SOLOTEST_DIRECTION_LEFT:
-		clear = n.left;
-		place = farn.left;
+		over = n.left;
+		to = far_n.left;
 		break;
 	}
 
-	clear_peg(b, peg_index);
-	clear_peg(b, clear);
-	place_peg(b, place);
+	clear_peg(&b->board, peg);
+	clear_peg(&b->board, over);
+	set_peg(&b->board, over);
 
-	free_to_move(b, peg_index);
-	free_to_move(b, clear);
-	block_move_to(b, place);
+	update_peg_can_move(b, peg);
+	update_peg_can_move(b, over);
+	update_peg_can_move(b, to);
 }
