@@ -17,14 +17,16 @@ int main()
 
 	if (!scanf("%d", &selection)) {
 		perror("Unexpected error!");
-		exit(1);
+		return 1;
 	}
 
 	if (selection == 1) {
 		solotest_play();
-	} else if (selection == 2) {
+	} if (selection == 2) {
 		solotest_solver();
-	} else {
-		printf("Unknown option!");
-	}
+	} 
+	
+	printf("Unknown option!");
+	// return 1 just like line 20
+	return 1;
 }
