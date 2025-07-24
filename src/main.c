@@ -3,12 +3,13 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <errno.h>
 
 int main()
 {
 	int selection;
-
+	errno = EINVAL;  // perror() function appends errno at the end. Previous one was returning "success"
+	
 	printf("=== SOLO TEST ===\n"
 	       "Select game mode:\n"
 	       "1 - Play!\n"
@@ -27,6 +28,6 @@ int main()
 	} 
 	
 	printf("Unknown option!");
-	// return 1 just like line 20
+	// return 1 just like line 21
 	return 1;
 }
